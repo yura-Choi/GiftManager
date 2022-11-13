@@ -22,7 +22,7 @@ public class DB {
 	
 	public DB(){
 		try {
-			File file = new File("C:\\Users\\__\\db.txt");
+			File file = new File("C:\\Users\\yura\\db.txt");
 			if(!file.exists()) {
 				System.err.println("db.txt is not existed");
 				return;
@@ -119,7 +119,7 @@ public class DB {
 		return item;
 	}
 	
-	public static int insertItem(Item item) {
+	public boolean insertItem(Item item) {
 		try {
 			String sql = "INSERT INTO gifts(type, company, name, expired_date, stored_location) VALUES ('";
 			String[] data = item.getData();
@@ -130,20 +130,17 @@ public class DB {
 			sql += data[4]+"','";
 			sql += data[5]+"');";
 			
-			System.out.println(data[1]);
-			
 			int result = stmt.executeUpdate(sql);
-			if(result != 1) return -1;
+			if(result != 1) return false;
 
-			return stmt.getGeneratedKeys().getInt(0);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return -1;
-		
+
+		return true;		
 	}
 	
-	public static boolean modifyItem(Item item) {
+	public boolean modifyItem(Item item) {
 		try {
 			String sql = "UPDATE gifts SET";
 			String[] data = item.getData();
@@ -164,7 +161,7 @@ public class DB {
 		return true;
 	}
 	
-	public static boolean deleteItem(int id) {
+	public boolean deleteItem(int id) {
 		try {
 			String sql = "DELETE FROM gifts WHERE id=";
 			sql += id+";";

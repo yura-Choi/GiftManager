@@ -1,13 +1,11 @@
 package gui;
 
-import db.DB;
+import controller.Resource;
 import db.Item;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.regex.Pattern;
 
 public class Dialog {
@@ -20,22 +18,18 @@ public class Dialog {
 	private JButton submitButton = new JButton("create");
 	
 	private JDialog dialog = null;
-	private JFrame mainFrame = null;
 	
-	Dialog(JFrame frame){
-		dialog = createDialogFrame(frame);
+	Dialog(){
+		dialog = createDialogFrame();
 		dialog.setTitle("기프티콘 추가");
-		mainFrame = frame;
 	}
 	
-	Dialog(JFrame frame, Item item){
-		dialog = createDialogFrame(frame);
+	Dialog(Item item){
+		dialog = createDialogFrame();
 		dialog.setTitle("기프티콘 정보 수정");
 		submitButton.setText("modify");
 		
 		setDialogField(item);
-
-		mainFrame = frame;
 	}
 	
 	private void setDialogField(Item item) {
@@ -63,15 +57,9 @@ public class Dialog {
 							name.getText(),
 							expiredDate.getText(),
 							storedLocation.getText());
-					
-					if(DB.insertItem(item) == -1) {
-						messagePopUp("failed to insert item");
-					}
-					setDialogField(new Item(-1, "카페", "", "", "", ""));
-					
+
 					dialog.setVisible(false);
-				} else {
-					dialog.setVisible(true); // failed validation
+					Resource.gui.sendFormDataToController("add", item);
 				}
 				
 			} else if(button.getText().equals("modify")) {
@@ -84,22 +72,17 @@ public class Dialog {
 							expiredDate.getText(),
 							storedLocation.getText());
 					
-					if(!DB.modifyItem(item)) {
-						messagePopUp("failed to modify item");
-					}
-					
 					dialog.setVisible(false);
-				} else {
-					dialog.setVisible(true); // failed validation
+					Resource.gui.sendFormDataToController("modify", item);	
+				
 				}
 			}
 		}
 		
 	}
 	
-	
-	private JDialog createDialogFrame(JFrame frame) {
-		dialog = new JDialog(frame);
+	private JDialog createDialogFrame() {
+		dialog = new JDialog(new JFrame());
 		dialog.setSize(400, 400);
 		
 		JPanel mainPanel = new JPanel();
