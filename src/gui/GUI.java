@@ -73,8 +73,8 @@ public class GUI {
 			listTable.removeColumn(listTable.getColumnModel().getColumn(0));
 			
 			listPanel.add(new JScrollPane(listTable));
+			listTable.addMouseListener(new JTableMouseListener());
 		}
-		listTable.addMouseListener(new JTableMouseListener());
 		
 		return listPanel;
 	}
@@ -154,7 +154,6 @@ public class GUI {
 			JTable jtable = (JTable)e.getSource();
 			selectedItem = String.valueOf(jtable.getModel().getValueAt(jtable.getSelectedRow(), 0));
 			selectedRow = jtable.getSelectedRow();
-			System.out.println("item : " + selectedItem +" | row : " + selectedRow);
 			
 		}
 		public void mousePressed(MouseEvent e) { }

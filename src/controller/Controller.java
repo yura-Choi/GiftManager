@@ -23,7 +23,7 @@ public class Controller {
 		mainPanel.add(listPanel);
 		frame.add(mainPanel);
 		
-		frame.pack();
+		frame.setSize(500, 600);
 		frame.setVisible(true);
 	}
 	
